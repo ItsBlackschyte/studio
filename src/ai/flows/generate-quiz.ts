@@ -1,5 +1,3 @@
-// This file is machine-generated - edit at your own risk.
-
 'use server';
 
 /**
@@ -12,9 +10,11 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const GenerateQuizInputSchema = z.object({
   topic: z.string().describe('The topic to generate a quiz for.'),
+  apiKey: z.string().describe('The user-provided API key.'),
 });
 export type GenerateQuizInput = z.infer<typeof GenerateQuizInputSchema>;
 
@@ -41,7 +41,18 @@ const generateQuizFlow = ai.defineFlow(
     outputSchema: GenerateQuizOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const customAI = genkit({
+      plugins: [googleAI({apiKey: input.apiKey})],
+    });
+
+    const customPrompt = customAI.definePrompt({
+      name: 'customGenerateQuizPrompt',
+      input: {schema: GenerateQuizInputSchema},
+      output: {schema: GenerateQuizOutputSchema},
+      prompt: `Generate a quiz for the topic: {{{topic}}}. The quiz should include multiple choice questions and answers.`,
+    });
+    
+    const {output} = await customPrompt(input);
     return output!;
   }
 );

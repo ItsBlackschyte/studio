@@ -1,5 +1,3 @@
-// This file is machine-generated - edit at your own risk.
-
 'use server';
 
 /**
@@ -12,9 +10,11 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const SimplifyExplanationInputSchema = z.object({
   concept: z.string().describe('The complex concept to simplify.'),
+  apiKey: z.string().describe('The user-provided API key.'),
 });
 
 export type SimplifyExplanationInput = z.infer<typeof SimplifyExplanationInputSchema>;
@@ -35,7 +35,7 @@ const simplifyExplanationPrompt = ai.definePrompt({
   output: {schema: SimplifyExplanationOutputSchema},
   prompt: `You are an expert in simplifying complex concepts. Please provide a clear and concise explanation of the following concept:
 
-  {{concept}}
+  {{{concept}}}
   `,
 });
 
@@ -46,7 +46,21 @@ const simplifyExplanationFlow = ai.defineFlow(
     outputSchema: SimplifyExplanationOutputSchema,
   },
   async input => {
-    const {output} = await simplifyExplanationPrompt(input);
+     const customAI = genkit({
+      plugins: [googleAI({apiKey: input.apiKey})],
+    });
+
+    const customPrompt = customAI.definePrompt({
+      name: 'customSimplifyExplanationPrompt',
+      input: {schema: SimplifyExplanationInputSchema},
+      output: {schema: SimplifyExplanationOutputSchema},
+      prompt: `You are an expert in simplifying complex concepts. Please provide a clear and concise explanation of the following concept:
+    
+      {{{concept}}}
+      `,
+    });
+
+    const {output} = await customPrompt(input);
     return output!;
   }
 );

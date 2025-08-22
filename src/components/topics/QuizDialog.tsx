@@ -14,28 +14,44 @@ import {
 import { generateQuiz } from '@/ai/flows/generate-quiz';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
+import ApiKeyDialog from '../layout/ApiKeyDialog';
 
 interface QuizDialogProps {
   topic: string;
   children: React.ReactNode;
 }
 
+const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+
 export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [quizContent, setQuizContent] = useState('');
   const [error, setError] = useState('');
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const { toast } = useToast();
 
   const handleGenerateQuiz = async () => {
+    const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (!apiKey) {
+      setShowApiKeyDialog(true);
+      return;
+    }
     setIsLoading(true);
     setError('');
     setQuizContent('');
     try {
-      const result = await generateQuiz({ topic });
+      const result = await generateQuiz({ topic, apiKey });
       setQuizContent(result.quiz);
     } catch (e) {
       console.error(e);
       setError('Failed to generate quiz. Please try again.');
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to generate quiz. Your API key might be invalid.',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -47,6 +63,14 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
         setQuizContent('');
         setError('');
     }
+  }
+
+  if (showApiKeyDialog) {
+    return <ApiKeyDialog
+      isOpen={showApiKeyDialog}
+      onOpenChange={setShowApiKeyDialog}
+      promptText="Please add your AI API key to generate a quiz."
+     />
   }
 
   return (

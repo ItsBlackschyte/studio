@@ -15,6 +15,8 @@ import { Loader2, Clapperboard } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
+import ApiKeyDialog from '../layout/ApiKeyDialog';
 
 interface VideoPlayerDialogProps {
   videoUrl: string;
@@ -29,6 +31,8 @@ function extractVideoId(url: string) {
     return match ? match[1] : null;
 }
 
+const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+
 export default function VideoPlayerDialog({
   videoUrl,
   title,
@@ -39,11 +43,18 @@ export default function VideoPlayerDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const { toast } = useToast();
 
   const videoId = extractVideoId(videoUrl);
   const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 
   const handleGenerateTranscript = async () => {
+    const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (!apiKey) {
+      setShowApiKeyDialog(true);
+      return;
+    }
     setIsLoading(true);
     setError('');
     setTranscript('');
@@ -51,11 +62,17 @@ export default function VideoPlayerDialog({
       const result = await generateVideoTranscript({
         videoTitle: title,
         topic: subTopicTitle,
+        apiKey
       });
       setTranscript(result.transcript);
     } catch (e) {
       console.error(e);
       setError('Failed to generate transcript. Please try again.');
+       toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to generate transcript. Your API key might be invalid.',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +86,17 @@ export default function VideoPlayerDialog({
     }
   }
 
+  if (showApiKeyDialog) {
+    return <ApiKeyDialog
+      isOpen={showApiKeyDialog}
+      onOpenChange={setShowApiKeyDialog}
+      promptText="Please add your AI API key to generate a transcript."
+     />
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpen}>
-      <DialogTrigger asChild onClick={(e) => {e.stopPropagation(); setIsOpen(true); }}>{children}</DialogTrigger>
+      <DialogTrigger asChild onClick={(e) => {e.stopPropagation();}}>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

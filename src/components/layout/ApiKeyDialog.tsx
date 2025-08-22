@@ -18,10 +18,19 @@ import { useToast } from '@/hooks/use-toast';
 
 const API_KEY_STORAGE_KEY = 'user-ai-api-key';
 
-export default function ApiKeyDialog() {
-  const [isOpen, setIsOpen] = useState(false);
+interface ApiKeyDialogProps {
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
+  promptText?: string;
+}
+
+export default function ApiKeyDialog({ isOpen: controlledIsOpen, onOpenChange: controlledOnOpenChange, promptText }: ApiKeyDialogProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [apiKey, setApiKey] = useState('');
   const { toast } = useToast();
+
+  const isOpen = controlledIsOpen ?? internalIsOpen;
+  const setIsOpen = controlledOnOpenChange ?? setInternalIsOpen;
 
   useEffect(() => {
     if (isOpen) {
@@ -36,10 +45,62 @@ export default function ApiKeyDialog() {
     localStorage.setItem(API_KEY_STORAGE_KEY, apiKey);
     toast({
       title: 'API Key Saved',
-      description: 'Your AI API key has been saved to your browser\'s local storage.',
+      description: "Your AI API key has been saved. You can now use the AI features.",
     });
     setIsOpen(false);
+    // Reload to apply the key if it was missing.
+    window.location.reload();
   };
+
+  const handleCancel = () => {
+    if (!localStorage.getItem(API_KEY_STORAGE_KEY)) {
+        toast({
+            variant: 'destructive',
+            title: 'API Key Required',
+            description: 'You need to set an API key to use AI features.',
+        });
+    }
+    setIsOpen(false)
+  }
+
+  const dialogContent = (
+    <DialogContent className="sm:max-w-[425px]">
+      <DialogHeader>
+        <DialogTitle>Set Your AI API Key</DialogTitle>
+        <DialogDescription>
+          {promptText || 'Enter your personal AI API key to use the generative features. This key is stored securely in your browser and is never sent to our servers.'}
+        </DialogDescription>
+      </DialogHeader>
+      <div className="grid gap-4 py-4">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="api-key" className="text-right">
+            API Key
+          </Label>
+          <Input
+            id="api-key"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            className="col-span-3"
+            type="password"
+            placeholder="Enter your API key"
+          />
+        </div>
+      </div>
+      <DialogFooter>
+        <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
+        <Button onClick={handleSave}>Save Key</Button>
+      </DialogFooter>
+    </DialogContent>
+  );
+  
+  // If isOpen is controlled, we don't need the trigger.
+  if (controlledIsOpen !== undefined) {
+    return (
+       <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          {dialogContent}
+        </Dialog>
+    )
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -49,33 +110,7 @@ export default function ApiKeyDialog() {
           <span className="sr-only">Set API Key</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Set Your AI API Key</DialogTitle>
-          <DialogDescription>
-            Enter your personal AI API key to use the generative features. This key is stored securely in your browser and is never sent to our servers.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="api-key" className="text-right">
-              API Key
-            </Label>
-            <Input
-              id="api-key"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="col-span-3"
-              type="password"
-              placeholder="Enter your API key"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
-          <Button onClick={handleSave}>Save Key</Button>
-        </DialogFooter>
-      </DialogContent>
+      {dialogContent}
     </Dialog>
   );
 }

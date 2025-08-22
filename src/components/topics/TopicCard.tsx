@@ -7,11 +7,17 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, FileQuestion, ExternalLink } from 'lucide-react';
+import { Lightbulb, FileQuestion, Book, Video } from 'lucide-react';
 import ExplanationDialog from './ExplanationDialog';
 import QuizDialog from './QuizDialog';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface TopicCardProps {
   topic: Topic;
@@ -79,12 +85,24 @@ export default function TopicCard({
                     </div>
                     <div className="flex items-center opacity-0 group-hover/item:opacity-100 transition-opacity">
                       {subTopic.resources && subTopic.resources.length > 0 && (
-                          <Link href={subTopic.resources[0].url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                             <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <ExternalLink className="w-4 h-4" />
-                                <span className="sr-only">Resource for {subTopic.title}</span>
+                              <Book className="w-4 h-4" />
+                              <span className="sr-only">Resources for {subTopic.title}</span>
                             </Button>
-                          </Link>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+                            {subTopic.resources.map((resource, index) => (
+                              <DropdownMenuItem key={index} asChild>
+                                <Link href={resource.url} target="_blank" rel="noopener noreferrer">
+                                  <Video className="mr-2 h-4 w-4" />
+                                  <span>{resource.title}</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       )}
                       <ExplanationDialog concept={subTopic.title}>
                         <Button variant="ghost" size="icon" className="h-8 w-8">

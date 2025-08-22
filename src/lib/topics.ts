@@ -33,7 +33,7 @@ export const topics: Topic[] = [
     description: 'Foundation of predictive modeling.',
     icon: Target,
     subTopics: [
-      { id: 'supervised-0', title: 'Linear & Logistic Regression', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
+      { id: 'supervised-0', title: 'Linear & Logistic Regression', resources: [{ title: 'Lecture 1', url: machineLearningPlaylist }, { title: 'Lecture 2', url: machineLearningPlaylist }] },
       { id: 'supervised-1', title: 'Regularization: Ridge, Lasso, Elastic Net', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'supervised-2', title: 'Naive Bayes (Gaussian, Multinomial, Bernoulli)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'supervised-3', title: 'k-Nearest Neighbors (k-NN)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
@@ -51,7 +51,7 @@ export const topics: Topic[] = [
     description: 'Discover hidden patterns in data.',
     icon: Blocks,
     subTopics: [
-      { id: 'unsupervised-0', title: 'Clustering: KMeans, DBSCAN', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
+      { id: 'unsupervised-0', title: 'Clustering: KMeans, DBSCAN', resources: [{ title: 'Lecture 1', url: machineLearningPlaylist }, { title: 'Lecture 2', url: machineLearningPlaylist }] },
       { id: 'unsupervised-1', title: 'Gaussian Mixture Models (GMM)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'unsupervised-2', title: 'Association Rule Learning (Apriori)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'unsupervised-3', title: 'Anomaly Detection (Isolation Forest)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
@@ -121,7 +121,7 @@ export const topics: Topic[] = [
       { id: 'generative-4', title: 'Parameter-efficient Fine-tuning (PEFT)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'generative-5', title: 'RLHF & Instruction Tuning', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'generative-6', title: 'Text Preprocessing & Embeddings', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
-      { id: 'generative-7', title: 'Multimodal Models (CLIP, DALL-E)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
+      { id: 'generative-7', 'title': 'Multimodal Models (CLIP, DALL-E)', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
       { id: 'generative-8', title: 'Ethics & Bias in Generative Models', resources: [{ title: 'Lecture', url: machineLearningPlaylist }] },
     ],
   },

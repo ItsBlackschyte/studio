@@ -110,7 +110,7 @@ export default function Home() {
                 <CardDescription className="text-sm">A visual overview of your progress across all topics.</CardDescription>
               </CardHeader>
               <CardContent className="p-6">
-                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
+                 <ChartContainer config={chartConfig} className="mx-auto aspect-video max-h-[400px]">
                   <RadarChart data={chartData} outerRadius="80%">
                     <ChartTooltip
                       cursor={false}

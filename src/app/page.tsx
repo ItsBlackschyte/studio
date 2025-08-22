@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
+import Spline from '@splinetool/react-spline';
 
 const chartConfig = {
   progress: {
@@ -95,14 +96,7 @@ export default function Home() {
                     </Button>
                 </div>
                 <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
-                   <Image 
-                     src="https://www.atomcamp.com/wp-content/uploads/2024/01/image-1-1024x705.png"
-                     alt="AI Learning Path"
-                     layout="fill"
-                     objectFit="contain"
-                     data-ai-hint="abstract technology"
-                   />
-                   
+                   <Spline scene="https://prod.spline.design/4113-ELl3a7WjSgY/scene.splinecode" />
                 </div>
             </div>
             <Card className="mt-12 shadow-lg bg-card/70 backdrop-blur-sm border-2 border-primary/20">
@@ -111,8 +105,8 @@ export default function Home() {
                 <CardDescription className="text-sm">A visual overview of your progress across all topics.</CardDescription>
               </CardHeader>
               <CardContent>
-                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[350px]">
-                  <RadarChart data={chartData}>
+                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
+                  <RadarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                     <ChartTooltip
                       cursor={false}
                       content={<ChartTooltipContent indicator="dot" />}

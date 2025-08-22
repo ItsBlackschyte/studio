@@ -111,7 +111,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-6">
                  <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
-                  <RadarChart data={chartData} margin={{ top: 40, right: 100, bottom: 40, left: 100 }}>
+                  <RadarChart data={chartData} outerRadius="80%">
                     <ChartTooltip
                       cursor={false}
                       content={<ChartTooltipContent indicator="dot" />}

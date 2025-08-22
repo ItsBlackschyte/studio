@@ -111,12 +111,12 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-6">
                  <ChartContainer config={chartConfig} className="mx-auto aspect-video max-h-[400px]">
-                  <RadarChart data={chartData} outerRadius="80%">
+                  <RadarChart data={chartData}>
                     <ChartTooltip
                       cursor={false}
                       content={<ChartTooltipContent indicator="dot" />}
                     />
-                    <PolarAngleAxis dataKey="topic" tick={{ fontSize: 12, fillOpacity: 0.8 }} />
+                    <PolarAngleAxis dataKey="topic" tick={{ fill: "hsl(var(--foreground))", fillOpacity: 0.8 }} />
                     <PolarGrid />
                     <Radar
                       dataKey="progress"

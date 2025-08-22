@@ -14,7 +14,6 @@ import {googleAI} from '@genkit-ai/googleai';
 
 const SimplifyExplanationInputSchema = z.object({
   concept: z.string().describe('The complex concept to simplify.'),
-  apiKey: z.string().describe('The user-provided API key.'),
 });
 
 export type SimplifyExplanationInput = z.infer<typeof SimplifyExplanationInputSchema>;
@@ -47,7 +46,6 @@ const simplifyExplanationFlow = ai.defineFlow(
   },
   async (input, streamingCallback) => {
     const {output} = await simplifyExplanationPrompt(input, {
-      auth: {apiKey: input.apiKey},
       streamingCallback,
     });
     return output!;

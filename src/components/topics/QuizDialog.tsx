@@ -34,7 +34,7 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
 
   const handleGenerateQuiz = async () => {
     const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!apiKey) {
+    if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
       setShowApiKeyDialog(true);
       return;
     }
@@ -42,7 +42,7 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
     setError('');
     setQuizContent('');
     try {
-      const result = await generateQuiz({ topic, apiKey });
+      const result = await generateQuiz({ topic });
       setQuizContent(result.quiz);
     } catch (e) {
       console.error(e);
@@ -50,7 +50,7 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate quiz. Your API key might be invalid.',
+        description: 'Failed to generate quiz. Your API key might be invalid or not configured correctly for the deployed environment.',
       });
     } finally {
       setIsLoading(false);

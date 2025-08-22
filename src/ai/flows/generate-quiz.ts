@@ -14,7 +14,6 @@ import {googleAI} from '@genkit-ai/googleai';
 
 const GenerateQuizInputSchema = z.object({
   topic: z.string().describe('The topic to generate a quiz for.'),
-  apiKey: z.string().describe('The user-provided API key.'),
 });
 export type GenerateQuizInput = z.infer<typeof GenerateQuizInputSchema>;
 
@@ -42,7 +41,6 @@ const generateQuizFlow = ai.defineFlow(
   },
   async (input, streamingCallback) => {
     const {output} = await prompt(input, {
-      auth: {apiKey: input.apiKey},
       streamingCallback,
     });
     return output!;

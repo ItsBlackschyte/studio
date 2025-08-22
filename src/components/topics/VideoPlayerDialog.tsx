@@ -51,7 +51,7 @@ export default function VideoPlayerDialog({
 
   const handleGenerateTranscript = async () => {
     const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!apiKey) {
+    if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
       setShowApiKeyDialog(true);
       return;
     }
@@ -62,7 +62,6 @@ export default function VideoPlayerDialog({
       const result = await generateVideoTranscript({
         videoTitle: title,
         topic: subTopicTitle,
-        apiKey
       });
       setTranscript(result.transcript);
     } catch (e) {
@@ -71,7 +70,7 @@ export default function VideoPlayerDialog({
        toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate transcript. Your API key might be invalid.',
+        description: 'Failed to generate transcript. Your API key might be invalid or not configured correctly for the deployed environment.',
       });
     } finally {
       setIsLoading(false);
@@ -155,7 +154,7 @@ export default function VideoPlayerDialog({
                         Generating...
                     </>
                     ) : (
-                        transcript ? 'Regenerate Transcript' : 'Generate Transcript'
+                        transcript ? 'Regenerate Transcript' : 'Regenerate Transcript'
                     )}
                 </Button>
             </div>

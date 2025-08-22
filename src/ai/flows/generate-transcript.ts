@@ -15,7 +15,6 @@ import {googleAI} from '@genkit-ai/googleai';
 const GenerateVideoTranscriptInputSchema = z.object({
     videoTitle: z.string().describe('The title of the video.'),
     topic: z.string().describe('The main topic the video is about.'),
-    apiKey: z.string().describe('The user-provided API key.'),
 });
 export type GenerateVideoTranscriptInput = z.infer<typeof GenerateVideoTranscriptInputSchema>;
 
@@ -47,7 +46,6 @@ const generateVideoTranscriptFlow = ai.defineFlow(
   },
   async (input, streamingCallback) => {
     const {output} = await prompt(input, {
-      auth: {apiKey: input.apiKey},
       streamingCallback,
     });
     return output!;

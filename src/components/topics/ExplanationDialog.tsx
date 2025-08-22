@@ -34,14 +34,14 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
     setIsOpen(open);
     if (open && !explanation) { // Only fetch if opening and no explanation exists
       const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-      if (!apiKey) {
+      if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
         setShowApiKeyDialog(true);
         return;
       }
       setIsLoading(true);
       setError('');
       try {
-        const result = await simplifyExplanation({ concept, apiKey });
+        const result = await simplifyExplanation({ concept });
         setExplanation(result.simplifiedExplanation);
       } catch (e) {
         console.error(e);
@@ -49,7 +49,7 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to simplify explanation. Your API key might be invalid.',
+          description: 'Failed to simplify explanation. Your API key might be invalid or not configured correctly for the deployed environment.',
         });
       } finally {
         setIsLoading(false);

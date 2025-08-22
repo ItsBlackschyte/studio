@@ -19,6 +19,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import VideoPlayerDialog from './VideoPlayerDialog';
+
 
 interface TopicCardProps {
   topic: Topic;
@@ -104,10 +106,16 @@ export default function TopicCard({
                               <DropdownMenuSeparator />
                               {subTopic.resources.map((resource, index) => (
                                 <DropdownMenuItem key={index} asChild>
-                                  <Link href={resource.url} target="_blank" rel="noopener noreferrer">
-                                    <Video className="mr-2 h-4 w-4" />
-                                    <span>{resource.title}</span>
-                                  </Link>
+                                  <VideoPlayerDialog
+                                    videoUrl={resource.url}
+                                    title={resource.title}
+                                    subTopicTitle={subTopic.title}
+                                  >
+                                    <button className="relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 w-full">
+                                      <Video className="mr-2 h-4 w-4" />
+                                      <span>{resource.title}</span>
+                                    </button>
+                                  </VideoPlayerDialog>
                                 </DropdownMenuItem>
                               ))}
                             </>

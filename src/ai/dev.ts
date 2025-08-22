@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/simplify-explanation.ts';
 import '@/ai/flows/generate-quiz.ts';
+import '@/ai/flows/generate-transcript.ts';

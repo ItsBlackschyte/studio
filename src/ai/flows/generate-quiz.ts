@@ -40,19 +40,11 @@ const generateQuizFlow = ai.defineFlow(
     inputSchema: GenerateQuizInputSchema,
     outputSchema: GenerateQuizOutputSchema,
   },
-  async input => {
-    const customAI = genkit({
-      plugins: [googleAI({apiKey: input.apiKey})],
+  async (input, streamingCallback) => {
+    const {output} = await prompt(input, {
+      auth: {apiKey: input.apiKey},
+      streamingCallback,
     });
-
-    const customPrompt = customAI.definePrompt({
-      name: 'customGenerateQuizPrompt',
-      input: {schema: GenerateQuizInputSchema},
-      output: {schema: GenerateQuizOutputSchema},
-      prompt: `Generate a quiz for the topic: {{{topic}}}. The quiz should include multiple choice questions and answers.`,
-    });
-    
-    const {output} = await customPrompt(input);
     return output!;
   }
 );

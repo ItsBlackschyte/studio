@@ -45,23 +45,11 @@ const generateVideoTranscriptFlow = ai.defineFlow(
     inputSchema: GenerateVideoTranscriptInputSchema,
     outputSchema: GenerateVideoTranscriptOutputSchema,
   },
-  async input => {
-     const customAI = genkit({
-      plugins: [googleAI({apiKey: input.apiKey})],
+  async (input, streamingCallback) => {
+    const {output} = await prompt(input, {
+      auth: {apiKey: input.apiKey},
+      streamingCallback,
     });
-
-    const customPrompt = customAI.definePrompt({
-      name: 'customGenerateVideoTranscriptPrompt',
-      input: {schema: GenerateVideoTranscriptInputSchema},
-      output: {schema: GenerateVideoTranscriptOutputSchema},
-      prompt: `You are an expert at creating educational content. Generate a detailed transcript for a video titled "{{videoTitle}}" on the topic of "{{topic}}". 
-      
-      The transcript should be structured like a real video transcript, with clear paragraphs and explanations. It should accurately cover the key concepts expected in such a video.
-      
-      Make the content informative and easy to follow.`,
-    });
-
-    const {output} = await customPrompt(input);
     return output!;
   }
 );

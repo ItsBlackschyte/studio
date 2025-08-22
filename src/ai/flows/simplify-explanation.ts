@@ -45,22 +45,11 @@ const simplifyExplanationFlow = ai.defineFlow(
     inputSchema: SimplifyExplanationInputSchema,
     outputSchema: SimplifyExplanationOutputSchema,
   },
-  async input => {
-     const customAI = genkit({
-      plugins: [googleAI({apiKey: input.apiKey})],
+  async (input, streamingCallback) => {
+    const {output} = await simplifyExplanationPrompt(input, {
+      auth: {apiKey: input.apiKey},
+      streamingCallback,
     });
-
-    const customPrompt = customAI.definePrompt({
-      name: 'customSimplifyExplanationPrompt',
-      input: {schema: SimplifyExplanationInputSchema},
-      output: {schema: SimplifyExplanationOutputSchema},
-      prompt: `You are an expert in simplifying complex concepts. Please provide a clear and concise explanation of the following concept:
-    
-      {{{concept}}}
-      `,
-    });
-
-    const {output} = await customPrompt(input);
     return output!;
   }
 );

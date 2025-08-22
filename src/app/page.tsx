@@ -83,7 +83,7 @@ export default function Home() {
                         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </Button>
                 </div>
-                <div className="relative h-64 md:h-80 rounded-xl overflow-hidden shadow-2xl">
+                <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
                    <Image 
                      src="https://www.atomcamp.com/wp-content/uploads/2024/01/image-1-1024x705.png"
                      alt="AI Learning Path"

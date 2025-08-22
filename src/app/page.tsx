@@ -16,11 +16,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import dynamic from 'next/dynamic';
-
-const Spline = dynamic(() => import('@splinetool/react-spline'), {
-  ssr: false,
-});
 
 const chartConfig = {
   progress: {
@@ -100,7 +95,13 @@ export default function Home() {
                     </Button>
                 </div>
                 <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
-                   <Spline scene="https://prod.spline.design/4113-ELl3a7WjSgY/scene.splinecode" />
+                   <Image 
+                        src="https://www.atomcamp.com/wp-content/uploads/2024/04/generative-AI-1.png"
+                        alt="AI illustration"
+                        layout="fill"
+                        objectFit="cover"
+                        data-ai-hint="artificial intelligence technology"
+                    />
                 </div>
             </div>
             <Card className="mt-12 shadow-lg bg-card/70 backdrop-blur-sm border-2 border-primary/20">

@@ -85,7 +85,7 @@ export default function Home() {
                 </div>
                 <div className="relative h-64 md:h-80 rounded-xl overflow-hidden shadow-2xl">
                    <Image 
-                     src="https://placehold.co/600x400.png"
+                     src="https://www.atomcamp.com/wp-content/uploads/2024/01/image-1-1024x705.png"
                      alt="AI Learning Path"
                      layout="fill"
                      objectFit="cover"

@@ -88,7 +88,7 @@ export default function Home() {
                      src="https://www.atomcamp.com/wp-content/uploads/2024/01/image-1-1024x705.png"
                      alt="AI Learning Path"
                      layout="fill"
-                     objectFit="cover"
+                     objectFit="contain"
                      data-ai-hint="abstract technology"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />

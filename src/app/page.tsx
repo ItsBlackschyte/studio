@@ -6,10 +6,23 @@ import Header from '@/components/layout/Header';
 import TopicCard from '@/components/topics/TopicCard';
 import { topics, type SubTopic } from '@/lib/topics';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { PolarGrid, PolarAngleAxis, Radar, RadarChart } from "recharts"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart"
+
+const chartConfig = {
+  progress: {
+    label: "Progress",
+    color: "hsl(var(--primary))",
+  },
+} satisfies ChartConfig
 
 export default function Home() {
   const [completedSubTopics, setCompletedSubTopics] = useState<Set<string>>(
@@ -30,7 +43,6 @@ export default function Home() {
     );
   }, [completedSubTopics]);
 
-
   const handleToggleSubTopic = (subTopicId: string) => {
     setCompletedSubTopics(prev => {
       const newSet = new Set(prev);
@@ -43,13 +55,7 @@ export default function Home() {
     });
   };
 
-  const { totalProgress, topicProgress } = useMemo(() => {
-    const allSubTopics: SubTopic[] = topics.flatMap(t => t.subTopics);
-    const totalProgress =
-      allSubTopics.length > 0
-        ? (completedSubTopics.size / allSubTopics.length) * 100
-        : 0;
-
+  const { topicProgress, chartData } = useMemo(() => {
     const topicProgress = new Map<string, number>();
     topics.forEach(topic => {
       const completedInTopic = topic.subTopics.filter(st =>
@@ -57,12 +63,17 @@ export default function Home() {
       ).length;
       const progress =
         topic.subTopics.length > 0
-          ? (completedInTopic / topic.subTopics.length) * 100
+          ? Math.round((completedInTopic / topic.subTopics.length) * 100)
           : 0;
       topicProgress.set(topic.id, progress);
     });
 
-    return { totalProgress, topicProgress };
+    const chartData = topics.map(topic => ({
+      topic: topic.title,
+      progress: topicProgress.get(topic.id) || 0,
+    }));
+
+    return { topicProgress, chartData };
   }, [completedSubTopics]);
 
   return (
@@ -96,14 +107,26 @@ export default function Home() {
             </div>
             <Card className="mt-12 shadow-lg bg-card/70 backdrop-blur-sm border-2 border-primary/20">
               <CardHeader>
-                <CardTitle className="text-xl font-bold tracking-tight">Overall Progress</CardTitle>
-                <CardDescription className="text-sm">Your journey to mastering AI, one concept at a time.</CardDescription>
+                <CardTitle className="text-xl font-bold tracking-tight">Your Learning Profile</CardTitle>
+                <CardDescription className="text-sm">A visual overview of your progress across all topics.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-4">
-                  <Progress value={totalProgress} className="h-3" />
-                  <span className="font-bold text-lg text-primary">{`${Math.round(totalProgress)}%`}</span>
-                </div>
+                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[350px]">
+                  <RadarChart data={chartData}>
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent indicator="dot" />}
+                    />
+                    <PolarAngleAxis dataKey="topic" />
+                    <PolarGrid />
+                    <Radar
+                      dataKey="progress"
+                      fill="var(--color-progress)"
+                      fillOpacity={0.6}
+                      stroke="var(--color-progress)"
+                    />
+                  </RadarChart>
+                </ChartContainer>
               </CardContent>
             </Card>
         </section>

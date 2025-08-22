@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Header from '@/components/layout/Header';
 import TopicCard from '@/components/topics/TopicCard';
 import { topics, type SubTopic } from '@/lib/topics';
@@ -28,6 +28,9 @@ export default function Home() {
   const [completedSubTopics, setCompletedSubTopics] = useState<Set<string>>(
     new Set()
   );
+  const [openTopic, setOpenTopic] = useState<string | null>(null);
+  const topicsRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const savedProgress = localStorage.getItem('aiNavigatorProgress');
@@ -53,6 +56,11 @@ export default function Home() {
       }
       return newSet;
     });
+  };
+
+  const handleStartLearningClick = () => {
+    setOpenTopic('supervised');
+    topicsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const { topicProgress, chartData } = useMemo(() => {
@@ -89,7 +97,7 @@ export default function Home() {
                     <p className="text-lg text-muted-foreground">
                         Your personalized roadmap to understanding complex AI topics. Track your progress, get AI-powered explanations, and test your knowledge.
                     </p>
-                    <Button size="lg" className="group">
+                    <Button size="lg" className="group" onClick={handleStartLearningClick}>
                         Start Learning
                         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </Button>
@@ -130,7 +138,7 @@ export default function Home() {
             </Card>
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div ref={topicsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {topics.map(topic => (
             <TopicCard
               key={topic.id}
@@ -138,6 +146,8 @@ export default function Home() {
               progress={topicProgress.get(topic.id) || 0}
               completedSubTopics={completedSubTopics}
               onToggleSubTopic={handleToggleSubTopic}
+              isOpen={openTopic === topic.id}
+              onOpenChange={(isOpen) => setOpenTopic(isOpen ? topic.id : null)}
             />
           ))}
         </div>

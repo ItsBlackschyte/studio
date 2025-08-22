@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Topic } from '@/lib/topics';
@@ -27,6 +28,8 @@ interface TopicCardProps {
   progress: number;
   completedSubTopics: Set<string>;
   onToggleSubTopic: (subTopicId: string) => void;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
 }
 
 export default function TopicCard({
@@ -34,6 +37,8 @@ export default function TopicCard({
   progress,
   completedSubTopics,
   onToggleSubTopic,
+  isOpen,
+  onOpenChange,
 }: TopicCardProps) {
   return (
     <Card className="flex flex-col h-full shadow-md hover:shadow-xl transition-shadow duration-300 bg-card/50 hover:bg-card/90 group">
@@ -56,7 +61,13 @@ export default function TopicCard({
           </div>
           <Progress value={progress} aria-label={`${topic.title} progress`} className="h-2" />
         </div>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion 
+          type="single" 
+          collapsible 
+          className="w-full"
+          value={isOpen ? 'subtopics' : ''}
+          onValueChange={(value) => onOpenChange(value === 'subtopics')}
+        >
           <AccordionItem value="subtopics" className="border-none">
             <AccordionTrigger className="font-semibold text-base hover:no-underline pt-4 flex justify-center text-primary/80 hover:text-primary">
               <span className="text-sm">View Learning Path</span>

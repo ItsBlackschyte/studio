@@ -10,15 +10,21 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
 
 const GenerateQuizInputSchema = z.object({
   topic: z.string().describe('The topic to generate a quiz for.'),
 });
 export type GenerateQuizInput = z.infer<typeof GenerateQuizInputSchema>;
 
+const QuizQuestionSchema = z.object({
+    question: z.string(),
+    options: z.array(z.string()),
+    answer: z.string(),
+});
+export type QuizQuestion = z.infer<typeof QuizQuestionSchema>;
+
 const GenerateQuizOutputSchema = z.object({
-  quiz: z.string().describe('The generated quiz questions and answers.'),
+  quiz: z.array(QuizQuestionSchema).describe('The generated quiz questions and answers in JSON format.'),
 });
 export type GenerateQuizOutput = z.infer<typeof GenerateQuizOutputSchema>;
 
@@ -30,7 +36,7 @@ const prompt = ai.definePrompt({
   name: 'generateQuizPrompt',
   input: {schema: GenerateQuizInputSchema},
   output: {schema: GenerateQuizOutputSchema},
-  prompt: `Generate a quiz for the topic: {{{topic}}}. The quiz should include multiple choice questions and answers.`,
+  prompt: `Generate a multiple choice quiz with 10 questions for the topic: {{{topic}}}. For each question, provide 4 options and clearly indicate the correct answer. Output the result in JSON format.`,
 });
 
 const generateQuizFlow = ai.defineFlow(
@@ -39,10 +45,8 @@ const generateQuizFlow = ai.defineFlow(
     inputSchema: GenerateQuizInputSchema,
     outputSchema: GenerateQuizOutputSchema,
   },
-  async (input, streamingCallback) => {
-    const {output} = await prompt(input, {
-      streamingCallback,
-    });
+  async (input) => {
+    const {output} = await prompt(input);
     return output!;
   }
 );

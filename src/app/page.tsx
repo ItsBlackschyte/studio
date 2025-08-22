@@ -43,6 +43,18 @@ export default function Home() {
     );
   }, [completedSubTopics]);
 
+  const handleToggleSubTopic = (subTopicId: string) => {
+    setCompletedSubTopics(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(subTopicId)) {
+        newSet.delete(subTopicId);
+      } else {
+        newSet.add(subTopicId);
+      }
+      return newSet;
+    });
+  };
+
   const { topicProgress, chartData } = useMemo(() => {
     const topicProgress = new Map<string, number>();
     topics.forEach(topic => {

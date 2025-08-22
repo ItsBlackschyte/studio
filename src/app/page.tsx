@@ -117,7 +117,7 @@ export default function Home() {
                       content={<ChartTooltipContent indicator="dot" />}
                     />
                     <PolarAngleAxis dataKey="topic" tick={{ fill: "hsl(var(--foreground))", fillOpacity: 0.8 }} />
-                    <PolarGrid />
+                    <PolarGrid stroke="hsl(var(--foreground))" strokeOpacity={0.2} />
                     <Radar
                       dataKey="progress"
                       fill="var(--color-progress)"

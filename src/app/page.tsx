@@ -91,7 +91,7 @@ export default function Home() {
                      objectFit="contain"
                      data-ai-hint="abstract technology"
                    />
-                   <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
+                   
                 </div>
             </div>
             <Card className="mt-12 shadow-lg bg-card/70 backdrop-blur-sm border-2 border-primary/20">
@@ -120,8 +120,8 @@ export default function Home() {
           ))}
         </div>
       </main>
-      <footer className="text-center py-4 border-t border-border/50">
-        <p className="text-sm text-muted-foreground">Created by Amit Dange</p>
+      <footer className="text-center py-4 border-t border-border/50 bg-foreground text-background">
+        <p className="text-sm">Created by Amit Dange</p>
       </footer>
     </div>
   );

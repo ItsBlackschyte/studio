@@ -43,18 +43,6 @@ export default function Home() {
     );
   }, [completedSubTopics]);
 
-  const handleToggleSubTopic = (subTopicId: string) => {
-    setCompletedSubTopics(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(subTopicId)) {
-        newSet.delete(subTopicId);
-      } else {
-        newSet.add(subTopicId);
-      }
-      return newSet;
-    });
-  };
-
   const { topicProgress, chartData } = useMemo(() => {
     const topicProgress = new Map<string, number>();
     topics.forEach(topic => {
@@ -96,7 +84,7 @@ export default function Home() {
                 </div>
                 <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
                    <Image 
-                        src="https://www.atomcamp.com/wp-content/uploads/2024/04/generative-AI-1.png"
+                        src="https://prutor.online/wp-content/uploads/2024/08/Machine-Learning.jpg"
                         alt="AI illustration"
                         layout="fill"
                         objectFit="cover"

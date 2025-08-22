@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.atomcamp.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'prutor.online',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

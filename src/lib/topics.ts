@@ -101,11 +101,11 @@ export const topics: Topic[] = [
     description: 'Model time and order-dependent data.',
     icon: Workflow,
     subTopics: [
-      { id: 'sequential-0', title: 'RNN, LSTM, GRU, Bidirectional RNNs', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}qjRad0V0_j4&list=${playlistId}&index=39` }] },
-      { id: 'sequential-1', title: 'Attention & Transformers (BERT, GPT)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}zduSFxRajkE&list=${playlistId}&index=40` }] },
-      { id: 'sequential-2', title: 'Sequence-to-Sequence Models', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}sY2-_Y-a_Ac&list=${playlistId}&index=41` }] },
-      { id: 'sequential-3', title: 'Time-series Forecasting: ARIMA, Prophet', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}MIa_dC5-g6g&list=${playlistId}&index=42` }] },
-      { id: 'sequential-4', title: 'Evaluation Metrics: Perplexity, BLEU/ROUGE', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}tqK4Z0k3-Sg&list=${playlistId}&index=43` }] },
+      { id: 'sequential-0', title: 'RNN, LSTM, GRU, Bidirectional RNNs', resources: [{ title: 'Lecture', url: `https://youtu.be/hoH0bBIzF98?si=8l4jzzZT881Gxwer` }] },
+      { id: 'sequential-1', title: 'Attention & Transformers (BERT, GPT)', resources: [{ title: 'Lecture', url: `https://youtu.be/hoH0bBIzF98?si=8l4jzzZT881Gxwer` }] },
+      { id: 'sequential-2', title: 'Sequence-to-Sequence Models', resources: [{ title: 'Lecture', url: `https://youtu.be/hoH0bBIzF98?si=8l4jzzZT881Gxwer` }] },
+      { id: 'sequential-3', title: 'Time-series Forecasting: ARIMA, Prophet', resources: [{ title: 'Lecture', url: `https://youtu.be/hoH0bBIzF98?si=8l4jzzZT881Gxwer` }] },
+      { id: 'sequential-4', title: 'Evaluation Metrics: Perplexity, BLEU/ROUGE', resources: [{ title: 'Lecture', url: `https://youtu.be/hoH0bBIzF98?si=8l4jzzZT881Gxwer` }] },
     ],
   },
   {
@@ -157,5 +157,3 @@ export const topics: Topic[] = [
     ],
   },
 ];
-
-    

@@ -36,7 +36,7 @@ const prompt = ai.definePrompt({
   name: 'generateQuizPrompt',
   input: {schema: GenerateQuizInputSchema},
   output: {schema: GenerateQuizOutputSchema},
-  prompt: `Generate a multiple choice quiz with 10 questions for the topic: {{{topic}}}. For each question, provide 4 options and clearly indicate the correct answer. Output the result in JSON format.`,
+  prompt: `Generate a multiple choice quiz with 10 questions for the topic: {{{topic}}}. For each question, provide 4 options and clearly indicate the correct answer. Output the result in JSON format only. Do not include any other text or formatting.`,
 });
 
 const generateQuizFlow = ai.defineFlow(

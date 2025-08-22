@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, FileQuestion, Book, Video } from 'lucide-react';
+import { Lightbulb, FileQuestion, Book, Video, MoreVertical } from 'lucide-react';
 import ExplanationDialog from './ExplanationDialog';
 import QuizDialog from './QuizDialog';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -61,7 +62,7 @@ export default function TopicCard({
             <AccordionContent>
               <div className="space-y-4 pt-2">
                 {topic.subTopics.map(subTopic => (
-                  <div key={subTopic.id} className="flex items-center justify-between group/item">
+                  <div key={subTopic.id} className="flex items-center justify-between">
                     <div
                       className="flex items-center gap-3 cursor-pointer"
                       onClick={() => onToggleSubTopic(subTopic.id)}
@@ -83,33 +84,36 @@ export default function TopicCard({
                         {subTopic.title}
                       </Label>
                     </div>
-                    <div className="flex items-center opacity-0 group-hover/item:opacity-100 transition-opacity">
-                      {subTopic.resources && subTopic.resources.length > 0 && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <Book className="w-4 h-4" />
-                              <span className="sr-only">Resources for {subTopic.title}</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
-                            {subTopic.resources.map((resource, index) => (
-                              <DropdownMenuItem key={index} asChild>
-                                <Link href={resource.url} target="_blank" rel="noopener noreferrer">
-                                  <Video className="mr-2 h-4 w-4" />
-                                  <span>{resource.title}</span>
-                                </Link>
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )}
-                      <ExplanationDialog concept={subTopic.title}>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Lightbulb className="w-4 h-4" />
-                          <span className="sr-only">Explain {subTopic.title}</span>
-                        </Button>
-                      </ExplanationDialog>
+                    <div className="flex items-center">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="w-4 h-4" />
+                            <span className="sr-only">More options for {subTopic.title}</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent onClick={(e) => e.stopPropagation()} align="end">
+                           <ExplanationDialog concept={subTopic.title}>
+                              <button className="relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 w-full">
+                                <Lightbulb className="mr-2 h-4 w-4" />
+                                <span>Explain</span>
+                              </button>
+                           </ExplanationDialog>
+                          {subTopic.resources && subTopic.resources.length > 0 && (
+                            <>
+                              <DropdownMenuSeparator />
+                              {subTopic.resources.map((resource, index) => (
+                                <DropdownMenuItem key={index} asChild>
+                                  <Link href={resource.url} target="_blank" rel="noopener noreferrer">
+                                    <Video className="mr-2 h-4 w-4" />
+                                    <span>{resource.title}</span>
+                                  </Link>
+                                </DropdownMenuItem>
+                              ))}
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 ))}

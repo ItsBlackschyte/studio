@@ -34,16 +34,16 @@ export const topics: Topic[] = [
     description: 'Foundation of predictive modeling.',
     icon: Target,
     subTopics: [
-      { id: 'supervised-0', title: 'Linear & Logistic Regression', resources: [{ title: 'Lecture 1', url: `${playlistBaseUrl}5b9Z8to_DAO&list=${playlistId}&index=1` }, { title: 'Lecture 2', url: `${playlistBaseUrl}tqK4Z0k3-Sg&list=${playlistId}&index=2` }] },
-      { id: 'supervised-1', title: 'Regularization: Ridge, Lasso, Elastic Net', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}I61s2hTAxH0&list=${playlistId}&index=3` }] },
-      { id: 'supervised-2', title: 'Naive Bayes (Gaussian, Multinomial, Bernoulli)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}yDFY2n_dOKM&list=${playlistId}&index=4` }] },
-      { id: 'supervised-3', title: 'k-Nearest Neighbors (k-NN)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}SA41tg6k4S8&list=${playlistId}&index=5` }] },
-      { id: 'supervised-4', title: 'Tree-Based & Ensemble Methods', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}D912bTNc-KE&list=${playlistId}&index=6` }] },
-      { id: 'supervised-5', title: 'Support Vector Machines (SVM)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}uYnK2S_c0L4&list=${playlistId}&index=7` }] },
-      { id: 'supervised-6', title: 'Data Preprocessing & Feature Engineering', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}d2--j4a1aI&list=${playlistId}&index=8` }] },
-      { id: 'supervised-7', title: 'Model Evaluation & Validation', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}tqK4Z0k3-Sg&list=${playlistId}&index=9` }] },
-      { id: 'supervised-8', title: 'Model Optimization (Hyperparameter Tuning)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}sY2-_Y-a_Ac&list=${playlistId}&index=10` }] },
-      { id: 'supervised-9', title: 'Model Interpretability (SHAP, LIME)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}5pQZ_4_c-M4&list=${playlistId}&index=11` }] },
+      { id: 'supervised-0', title: 'Linear & Logistic Regression', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-1', title: 'Regularization: Ridge, Lasso, Elastic Net', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-2', title: 'Naive Bayes (Gaussian, Multinomial, Bernoulli)', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-3', title: 'k-Nearest Neighbors (k-NN)', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-4', title: 'Tree-Based & Ensemble Methods', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-5', title: 'Support Vector Machines (SVM)', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-6', title: 'Data Preprocessing & Feature Engineering', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-7', title: 'Model Evaluation & Validation', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-8', title: 'Model Optimization (Hyperparameter Tuning)', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
+      { id: 'supervised-9', title: 'Model Interpretability (SHAP, LIME)', resources: [{ title: 'Watch Video', url: `https://youtu.be/Lb0JzFtTmBs?si=3ECZ1BhzZDFTFVZi` }] },
     ],
   },
   {
@@ -74,7 +74,6 @@ export const topics: Topic[] = [
       { id: 'dimensionality-3', title: 'Independent Component Analysis (ICA)', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}1BAn1bESvX8&list=${playlistId}&index=24` }] },
       { id: 'dimensionality-4', title: 'Kernel PCA & Autoencoders', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}v-4q_68S_Go&list=${playlistId}&index=25` }] },
       { id: 'dimensionality-5', title: 'Manifold Learning: t-SNE, UMAP', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}87gvpFC_1us&list=${playlistId}&index=26` }] },
-      { id: 'dimensionality-6', title: 'Feature Selection vs. Extraction', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}d2--j4a1aI&list=${playlistId}&index=27` }] },
       { id: 'dimensionality-7', title: 'Evaluation: Explained Variance Ratio', resources: [{ title: 'Lecture', url: `${playlistBaseUrl}y7prxOVa4pA&list=${playlistId}&index=28` }] },
     ],
   },
@@ -158,3 +157,5 @@ export const topics: Topic[] = [
     ],
   },
 ];
+
+    

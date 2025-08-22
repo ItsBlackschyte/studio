@@ -120,6 +120,9 @@ export default function Home() {
           ))}
         </div>
       </main>
+      <footer className="text-center py-4 border-t border-border/50">
+        <p className="text-sm text-muted-foreground">Created by Amit Dange</p>
+      </footer>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -16,7 +17,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import ApiKeyDialog from '../layout/ApiKeyDialog';
 
 interface VideoPlayerDialogProps {
   videoUrl: string;
@@ -31,9 +31,6 @@ function extractVideoId(url: string) {
     return match ? match[1] : null;
 }
 
-const API_KEY_STORAGE_KEY = 'user-ai-api-key';
-const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
-
 export default function VideoPlayerDialog({
   videoUrl,
   title,
@@ -44,19 +41,12 @@ export default function VideoPlayerDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const { toast } = useToast();
 
   const videoId = extractVideoId(videoUrl);
   const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 
   const handleGenerateTranscript = async () => {
-    const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!isServerKeyConfigured && !hasLocalKey) {
-      setShowApiKeyDialog(true);
-      return;
-    }
-    
     setIsLoading(true);
     setError('');
     setTranscript('');
@@ -68,15 +58,13 @@ export default function VideoPlayerDialog({
       setTranscript(result.transcript);
     } catch (e) {
       console.error(e);
-      setError('Failed to generate transcript. Please try again.');
+      const errorMessage = (e as Error).message || 'Please try again.';
+      setError(`Failed to generate transcript. ${errorMessage}`);
        toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate transcript. Your API key might be invalid or not configured correctly for the deployed environment.',
+        description: `Failed to generate transcript. Your API key might be invalid or not configured correctly.`,
       });
-      if (!isServerKeyConfigured) {
-        setShowApiKeyDialog(true);
-      }
     } finally {
       setIsLoading(false);
     }
@@ -88,14 +76,6 @@ export default function VideoPlayerDialog({
         setTranscript('');
         setError('');
     }
-  }
-
-  if (showApiKeyDialog) {
-    return <ApiKeyDialog
-      isOpen={showApiKeyDialog}
-      onOpenChange={setShowApiKeyDialog}
-      promptText="Please add your AI API key to generate a transcript."
-     />
   }
 
   return (

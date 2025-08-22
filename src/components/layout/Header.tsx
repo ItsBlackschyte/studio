@@ -1,8 +1,8 @@
+
 'use client';
 
 import { BotMessageSquare } from 'lucide-react';
 import { ThemeToggle } from '../theme-toggle';
-import ApiKeyDialog from './ApiKeyDialog';
 
 export default function Header() {
   return (
@@ -17,7 +17,6 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <ApiKeyDialog />
           </div>
         </div>
       </div>

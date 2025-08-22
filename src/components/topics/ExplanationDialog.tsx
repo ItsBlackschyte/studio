@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,33 +14,22 @@ import { simplifyExplanation } from '@/ai/flows/simplify-explanation';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import ApiKeyDialog from '../layout/ApiKeyDialog';
 
 interface ExplanationDialogProps {
   concept: string;
   children: React.ReactNode;
 }
 
-const API_KEY_STORAGE_KEY = 'user-ai-api-key';
-const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
-
 export default function ExplanationDialog({ concept, children }: ExplanationDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [explanation, setExplanation] = useState('');
   const [error, setError] = useState('');
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const { toast } = useToast();
 
   const handleOpenChange = async (open: boolean) => {
     setIsOpen(open);
     if (open && !explanation) { // Only fetch if opening and no explanation exists
-      const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
-      if (!isServerKeyConfigured && !hasLocalKey) {
-        setShowApiKeyDialog(true);
-        return;
-      }
-      
       setIsLoading(true);
       setError('');
       try {
@@ -47,28 +37,18 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
         setExplanation(result.simplifiedExplanation);
       } catch (e) {
         console.error(e);
-        setError('Failed to simplify explanation. Please try again.');
+        const errorMessage = (e as Error).message || 'Please try again.';
+        setError(`Failed to simplify explanation. ${errorMessage}`);
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to simplify explanation. Your API key might be invalid or not configured correctly for the deployed environment.',
+          description: `Failed to get explanation. Your API key might be invalid or not configured correctly.`,
         });
-        if (!isServerKeyConfigured) {
-          setShowApiKeyDialog(true);
-        }
       } finally {
         setIsLoading(false);
       }
     }
   };
-
-  if (showApiKeyDialog) {
-    return <ApiKeyDialog
-      isOpen={showApiKeyDialog}
-      onOpenChange={setShowApiKeyDialog}
-      promptText="Please add your AI API key to get an explanation."
-     />
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>

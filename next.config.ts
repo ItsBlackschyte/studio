@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -24,9 +25,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  env: {
-    NEXT_PUBLIC_API_KEY_CONFIGURED: (!!process.env.GEMINI_API_KEY).toString(),
-  }
 };
 
 export default nextConfig;

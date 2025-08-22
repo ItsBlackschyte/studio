@@ -16,8 +16,6 @@ import { generateQuiz, type QuizQuestion } from '@/ai/flows/generate-quiz';
 import { Loader2, ArrowLeft, ArrowRight, CheckCircle, XCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import ApiKeyDialog from '../layout/ApiKeyDialog';
-import { ScrollArea } from '../ui/scroll-area';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
 import { Card, CardContent } from '../ui/card';
@@ -29,28 +27,17 @@ interface QuizDialogProps {
   children: React.ReactNode;
 }
 
-const API_KEY_STORAGE_KEY = 'user-ai-api-key';
-const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
-
-
 export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [error, setError] = useState('');
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [checkedAnswers, setCheckedAnswers] = useState<Record<number, boolean>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const { toast } = useToast();
 
   const handleGenerateQuiz = async () => {
-    const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!isServerKeyConfigured && !hasLocalKey) {
-      setShowApiKeyDialog(true);
-      return;
-    }
-    
     setIsLoading(true);
     setError('');
     setQuestions([]);
@@ -63,15 +50,13 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
       setQuestions(quizData);
     } catch (e) {
       console.error(e);
-      setError('Failed to generate quiz. Please try again.');
+      const errorMessage = (e as Error).message || 'Please try again.';
+      setError(`Failed to generate quiz. ${errorMessage}`);
       toast({
         variant: 'destructive',
         title: 'Error',
         description: 'Failed to generate quiz. Your API key might be invalid or not configured correctly.',
       });
-      if (!isServerKeyConfigured) {
-        setShowApiKeyDialog(true);
-      }
     } finally {
       setIsLoading(false);
     }
@@ -99,14 +84,6 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const currentQuestion = questions[currentQuestionIndex];
   const isCurrentQuestionChecked = checkedAnswers[currentQuestionIndex];
   const progress = questions.length > 0 ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
-
-  if (showApiKeyDialog) {
-    return <ApiKeyDialog
-      isOpen={showApiKeyDialog}
-      onOpenChange={setShowApiKeyDialog}
-      promptText="Please add your AI API key to generate a quiz."
-     />
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpen}>

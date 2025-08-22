@@ -22,7 +22,6 @@ const Spline = dynamic(() => import('@splinetool/react-spline'), {
   ssr: false,
 });
 
-
 const chartConfig = {
   progress: {
     label: "Progress",
@@ -111,7 +110,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-6">
                  <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
-                  <RadarChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                  <RadarChart data={chartData} margin={{ top: 40, right: 80, bottom: 40, left: 80 }}>
                     <ChartTooltip
                       cursor={false}
                       content={<ChartTooltipContent indicator="dot" />}

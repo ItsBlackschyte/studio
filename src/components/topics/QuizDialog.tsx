@@ -30,6 +30,8 @@ interface QuizDialogProps {
 }
 
 const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
+
 
 export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,11 +45,12 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const { toast } = useToast();
 
   const handleGenerateQuiz = async () => {
-    const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+    const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (!isServerKeyConfigured && !hasLocalKey) {
       setShowApiKeyDialog(true);
       return;
     }
+    
     setIsLoading(true);
     setError('');
     setQuestions([]);
@@ -66,6 +69,9 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
         title: 'Error',
         description: 'Failed to generate quiz. Your API key might be invalid or not configured correctly.',
       });
+      if (!isServerKeyConfigured) {
+        setShowApiKeyDialog(true);
+      }
     } finally {
       setIsLoading(false);
     }

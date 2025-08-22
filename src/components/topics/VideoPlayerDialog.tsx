@@ -32,6 +32,7 @@ function extractVideoId(url: string) {
 }
 
 const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
 
 export default function VideoPlayerDialog({
   videoUrl,
@@ -50,11 +51,12 @@ export default function VideoPlayerDialog({
   const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 
   const handleGenerateTranscript = async () => {
-    const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+    const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (!isServerKeyConfigured && !hasLocalKey) {
       setShowApiKeyDialog(true);
       return;
     }
+    
     setIsLoading(true);
     setError('');
     setTranscript('');
@@ -72,6 +74,9 @@ export default function VideoPlayerDialog({
         title: 'Error',
         description: 'Failed to generate transcript. Your API key might be invalid or not configured correctly for the deployed environment.',
       });
+      if (!isServerKeyConfigured) {
+        setShowApiKeyDialog(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +159,7 @@ export default function VideoPlayerDialog({
                         Generating...
                     </>
                     ) : (
-                        transcript ? 'Regenerate Transcript' : 'Regenerate Transcript'
+                        transcript ? 'Regenerate Transcript' : 'Generate Transcript'
                     )}
                 </Button>
             </div>

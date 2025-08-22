@@ -17,6 +17,8 @@ import { KeyRound } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
+
 
 interface ApiKeyDialogProps {
   isOpen?: boolean;
@@ -100,6 +102,11 @@ export default function ApiKeyDialog({ isOpen: controlledIsOpen, onOpenChange: c
           {dialogContent}
         </Dialog>
     )
+  }
+  
+  // Don't show the trigger if the server key is configured
+  if (isServerKeyConfigured) {
+    return null;
   }
 
   return (

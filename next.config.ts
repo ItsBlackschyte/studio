@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
-    NEXT_PUBLIC_GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    NEXT_PUBLIC_API_KEY_CONFIGURED: (!!process.env.GEMINI_API_KEY).toString(),
   }
 };
 

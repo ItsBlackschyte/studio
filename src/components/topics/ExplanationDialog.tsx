@@ -21,6 +21,7 @@ interface ExplanationDialogProps {
 }
 
 const API_KEY_STORAGE_KEY = 'user-ai-api-key';
+const isServerKeyConfigured = process.env.NEXT_PUBLIC_API_KEY_CONFIGURED === 'true';
 
 export default function ExplanationDialog({ concept, children }: ExplanationDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,11 +34,12 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
   const handleOpenChange = async (open: boolean) => {
     setIsOpen(open);
     if (open && !explanation) { // Only fetch if opening and no explanation exists
-      const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-      if (!apiKey && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+      const hasLocalKey = !!localStorage.getItem(API_KEY_STORAGE_KEY);
+      if (!isServerKeyConfigured && !hasLocalKey) {
         setShowApiKeyDialog(true);
         return;
       }
+      
       setIsLoading(true);
       setError('');
       try {
@@ -51,6 +53,9 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
           title: 'Error',
           description: 'Failed to simplify explanation. Your API key might be invalid or not configured correctly for the deployed environment.',
         });
+        if (!isServerKeyConfigured) {
+          setShowApiKeyDialog(true);
+        }
       } finally {
         setIsLoading(false);
       }

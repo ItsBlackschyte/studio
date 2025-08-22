@@ -65,20 +65,20 @@ export default function Home() {
     <div className="bg-background min-h-screen text-foreground">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <Card className="mb-8 shadow-lg bg-card/70 backdrop-blur-sm">
+        <Card className="mb-8 shadow-lg bg-card/70 backdrop-blur-sm border-2 border-primary/20">
           <CardHeader>
-            <CardTitle className="text-2xl">Overall Progress</CardTitle>
-            <CardDescription>Your journey to mastering AI, one concept at a time.</CardDescription>
+            <CardTitle className="text-3xl font-bold tracking-tight">Overall Progress</CardTitle>
+            <CardDescription className="text-lg">Your journey to mastering AI, one concept at a time.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-4">
               <Progress value={totalProgress} className="h-4" />
-              <span className="font-bold text-lg text-primary">{`${Math.round(totalProgress)}%`}</span>
+              <span className="font-bold text-xl text-primary">{`${Math.round(totalProgress)}%`}</span>
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {topics.map(topic => (
             <TopicCard
               key={topic.id}

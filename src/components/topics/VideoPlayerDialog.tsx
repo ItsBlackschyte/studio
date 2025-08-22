@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { useApiKey } from '../ApiKeyProvider';
 
 interface VideoPlayerDialogProps {
   videoUrl: string;
@@ -42,11 +43,16 @@ export default function VideoPlayerDialog({
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState('');
   const { toast } = useToast();
+  const { apiKey, openDialog } = useApiKey();
 
   const videoId = extractVideoId(videoUrl);
   const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 
   const handleGenerateTranscript = async () => {
+    if (!apiKey) {
+      openDialog();
+      return;
+    }
     setIsLoading(true);
     setError('');
     setTranscript('');
@@ -54,6 +60,7 @@ export default function VideoPlayerDialog({
       const result = await generateVideoTranscript({
         videoTitle: title,
         topic: subTopicTitle,
+        apiKey,
       });
       setTranscript(result.transcript);
     } catch (e) {
@@ -63,7 +70,7 @@ export default function VideoPlayerDialog({
        toast({
         variant: 'destructive',
         title: 'Error',
-        description: `Failed to generate transcript. Your API key might be invalid or not configured correctly.`,
+        description: `Failed to generate transcript. Your API key might be invalid.`,
       });
     } finally {
       setIsLoading(false);

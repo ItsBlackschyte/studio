@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
+import { ApiKeyProvider } from '@/components/ApiKeyProvider';
 
 export const metadata: Metadata = {
   title: 'AI Navigator',
@@ -27,8 +28,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <ApiKeyProvider>
+            {children}
+            <Toaster />
+          </ApiKeyProvider>
         </ThemeProvider>
       </body>
     </html>

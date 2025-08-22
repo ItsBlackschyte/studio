@@ -14,6 +14,7 @@ import { simplifyExplanation } from '@/ai/flows/simplify-explanation';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useApiKey } from '../ApiKeyProvider';
 
 interface ExplanationDialogProps {
   concept: string;
@@ -25,15 +26,20 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
   const [isLoading, setIsLoading] = useState(false);
   const [explanation, setExplanation] = useState('');
   const [error, setError] = useState('');
+  const { apiKey, openDialog } = useApiKey();
   const { toast } = useToast();
 
   const handleOpenChange = async (open: boolean) => {
     setIsOpen(open);
     if (open && !explanation) { // Only fetch if opening and no explanation exists
+      if (!apiKey) {
+        openDialog();
+        return;
+      }
       setIsLoading(true);
       setError('');
       try {
-        const result = await simplifyExplanation({ concept });
+        const result = await simplifyExplanation({ concept, apiKey });
         setExplanation(result.simplifiedExplanation);
       } catch (e) {
         console.error(e);
@@ -42,7 +48,7 @@ export default function ExplanationDialog({ concept, children }: ExplanationDial
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: `Failed to get explanation. Your API key might be invalid or not configured correctly.`,
+          description: `Failed to get explanation. Your API key might be invalid.`,
         });
       } finally {
         setIsLoading(false);

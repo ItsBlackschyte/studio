@@ -8,12 +8,13 @@
  * - SimplifyExplanationOutput - The return type for the simplifyExplanation function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
+import {z} from 'genkit';
 
 const SimplifyExplanationInputSchema = z.object({
   concept: z.string().describe('The complex concept to simplify.'),
+  apiKey: z.string().optional().describe('The user-provided API key.'),
 });
 
 export type SimplifyExplanationInput = z.infer<typeof SimplifyExplanationInputSchema>;
@@ -25,29 +26,25 @@ const SimplifyExplanationOutputSchema = z.object({
 export type SimplifyExplanationOutput = z.infer<typeof SimplifyExplanationOutputSchema>;
 
 export async function simplifyExplanation(input: SimplifyExplanationInput): Promise<SimplifyExplanationOutput> {
-  return simplifyExplanationFlow(input);
-}
-
-const simplifyExplanationPrompt = ai.definePrompt({
-  name: 'simplifyExplanationPrompt',
-  input: {schema: SimplifyExplanationInputSchema},
-  output: {schema: SimplifyExplanationOutputSchema},
-  prompt: `You are an expert in simplifying complex concepts. Please provide a clear and concise explanation of the following concept:
-
-  {{{concept}}}
-  `,
-});
-
-const simplifyExplanationFlow = ai.defineFlow(
-  {
-    name: 'simplifyExplanationFlow',
-    inputSchema: SimplifyExplanationInputSchema,
-    outputSchema: SimplifyExplanationOutputSchema,
-  },
-  async (input, streamingCallback) => {
-    const {output} = await simplifyExplanationPrompt(input, {
-      streamingCallback,
-    });
-    return output!;
+  if (!input.apiKey) {
+    throw new Error('API key is required.');
   }
-);
+
+  const ai = genkit({
+    plugins: [googleAI({apiKey: input.apiKey})],
+    model: 'googleai/gemini-2.0-flash',
+  });
+
+  const simplifyExplanationPrompt = ai.definePrompt({
+    name: 'simplifyExplanationPrompt',
+    input: {schema: z.object({ concept: z.string() })},
+    output: {schema: SimplifyExplanationOutputSchema},
+    prompt: `You are an expert in simplifying complex concepts. Please provide a clear and concise explanation of the following concept:
+
+    {{{concept}}}
+    `,
+  });
+
+  const {output} = await simplifyExplanationPrompt({ concept: input.concept });
+  return output!;
+}

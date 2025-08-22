@@ -21,6 +21,7 @@ import { Label } from '../ui/label';
 import { Card, CardContent } from '../ui/card';
 import { Progress } from '../ui/progress';
 import { cn } from '@/lib/utils';
+import { useApiKey } from '../ApiKeyProvider';
 
 interface QuizDialogProps {
   topic: string;
@@ -36,8 +37,13 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
   const [checkedAnswers, setCheckedAnswers] = useState<Record<number, boolean>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const { toast } = useToast();
+  const { apiKey, openDialog } = useApiKey();
 
   const handleGenerateQuiz = async () => {
+    if (!apiKey) {
+      openDialog();
+      return;
+    }
     setIsLoading(true);
     setError('');
     setQuestions([]);
@@ -45,7 +51,7 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
     setCheckedAnswers({});
     setCurrentQuestionIndex(0);
     try {
-      const result = await generateQuiz({ topic });
+      const result = await generateQuiz({ topic, apiKey });
       const quizData = typeof result.quiz === 'string' ? JSON.parse(result.quiz) : result.quiz;
       setQuestions(quizData);
     } catch (e) {
@@ -55,7 +61,7 @@ export default function QuizDialog({ topic, children }: QuizDialogProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate quiz. Your API key might be invalid or not configured correctly.',
+        description: 'Failed to generate quiz. Your API key might be invalid.',
       });
     } finally {
       setIsLoading(false);

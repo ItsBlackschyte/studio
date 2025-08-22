@@ -16,7 +16,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import Spline from '@splinetool/react-spline';
+import dynamic from 'next/dynamic';
+
+const Spline = dynamic(() => import('@splinetool/react-spline'), {
+  ssr: false,
+});
+
 
 const chartConfig = {
   progress: {
@@ -104,14 +109,14 @@ export default function Home() {
                 <CardTitle className="text-xl font-bold tracking-tight">Your Learning Profile</CardTitle>
                 <CardDescription className="text-sm">A visual overview of your progress across all topics.</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                  <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
-                  <RadarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <RadarChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
                     <ChartTooltip
                       cursor={false}
                       content={<ChartTooltipContent indicator="dot" />}
                     />
-                    <PolarAngleAxis dataKey="topic" />
+                    <PolarAngleAxis dataKey="topic" tick={{ fontSize: 12, fillOpacity: 0.8 }} />
                     <PolarGrid />
                     <Radar
                       dataKey="progress"
